@@ -10,4 +10,10 @@ venv/
 
 .vscode/
 
-*.pt
+# Large YOLO models
+yolo11m.pt
+yolo11l.pt
+yolo11x.pt
+
+yolov8l.pt
+yolov8x.pt

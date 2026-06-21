@@ -1,14 +1,14 @@
-# 🎯Advanced Object Detection & Tracking System
+# 🎯 VISOR - Advanced Object Detection & Tracking System
 
 A professional-grade, browser-based real-time object detection and tracking system
-built with **YOLOv8 + DeepSORT + Flask**.
+built with **YOLO11, YOLOv8, DeepSORT, OpenCV, and Flask**.
 
 ---
 
 ## 📁 Project Structure
 
 ```
-CodeAlpha_ObjectDetection_Advanced/
+VISOR - Object Detection And Tracking/
 │
 ├── app.py                     ← Flask server + video processing thread
 ├── config.py                  ← All settings & constants (edit here!)
@@ -33,6 +33,20 @@ CodeAlpha_ObjectDetection_Advanced/
 ```
 
 ---
+
+## 🛠️ Technologies Used
+
+* Python 3.9+
+* Flask
+* OpenCV
+* Ultralytics YOLO11
+* Ultralytics YOLOv8
+* DeepSORT
+* NumPy
+* HTML5
+* CSS3
+* JavaScript
+
 
 ## ⚡ Quick Setup (Step by Step)
 
@@ -61,19 +75,37 @@ http://localhost:5000
 
 ---
 
+## 🤖 YOLO Models Included & Supported
+
+This project is designed to work with multiple Ultralytics YOLO models for object detection.
+
+### Included in Repository
+
+The following lightweight models are included for immediate testing:
+
+| Model                  | Size    | Purpose                           |
+| ---------------------- | ------- | --------------------------------- |
+| YOLO11n (`yolo11n.pt`) | ~5.6 MB | Lightweight, fast inference       |
+| YOLOv8n (`yolov8n.pt`) | ~6.5 MB | Lightweight, balanced performance |
+
+### Additional Models Supported
+
+The system was developed and tested with the following models:
+
+| Model                  | Size    |
+| ---------------------- | ------- |
+| YOLO11m (`yolo11m.pt`) | ~40 MB  |
+| YOLO11l (`yolo11l.pt`) | ~51 MB  |
+| YOLO11x (`yolo11x.pt`) | ~115 MB |
+| YOLOv8l (`yolov8l.pt`) | ~88 MB  |
+| YOLOv8x (`yolov8x.pt`) | ~137 MB |
+
+Large model weight files are not included in this repository to keep the project lightweight and within GitHub file size limits.
+
+Users may download additional model weights directly from Ultralytics and place them in the project root directory.
+
+
 ## 🎮 Features & How to Use
-
-### 🔍 Multiple YOLO Models
-In the **Controls** tab, choose from:
-| Model | Speed | Accuracy | Size |
-|-------|-------|----------|------|
-| YOLOv8n (Nano)  | ⚡⚡⚡⚡⚡ | ⭐⭐ | ~6MB |
-| YOLOv8s (Small) | ⚡⚡⚡⚡  | ⭐⭐⭐ | ~22MB |
-| YOLOv8m (Medium)| ⚡⚡⚡    | ⭐⭐⭐⭐ | ~52MB |
-| YOLOv8l (Large) | ⚡⚡      | ⭐⭐⭐⭐⭐ | ~87MB |
-| YOLOv8x (XLarge)| ⚡        | ⭐⭐⭐⭐⭐ | ~131MB |
-
-Hot-swap between models without restarting!
 
 ### 🎯 DeepSORT Tracking
 - Each object gets a **unique ID** that persists across frames
@@ -152,7 +184,7 @@ Webcam/Video
     ↓
 OpenCV (frame capture)
     ↓
-YOLOv8 (detect objects → bounding boxes + class + confidence)
+YOLO11 / YOLOv8 (detect objects → bounding boxes + class + confidence)
     ↓
 DeepSORT (assign persistent track IDs using Kalman filter + Re-ID DNN)
     ↓
