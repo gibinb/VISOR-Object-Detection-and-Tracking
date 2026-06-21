@@ -1,4 +1,4 @@
-# 🎯 CodeAlpha — Advanced Object Detection & Tracking System
+# 🎯Advanced Object Detection & Tracking System
 
 A professional-grade, browser-based real-time object detection and tracking system
 built with **YOLOv8 + DeepSORT + Flask**.
