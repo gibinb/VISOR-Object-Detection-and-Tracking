@@ -3,19 +3,28 @@
 A professional-grade, browser-based real-time object detection and tracking system
 built with **YOLO11, YOLOv8, DeepSORT, OpenCV, and Flask**.
 
+> **VISOR** — *See Everything. Miss Nothing.*
+
+### ✨ Highlights
+- 10 switchable YOLO models (YOLO11 + YOLOv8, nano to extra-large)
+- DeepSORT multi-object tracking with persistent IDs, speed and direction
+- **Start / Pause / Stop** controls — the camera never opens until you press Start
+- **Video seek bar** with current time / total duration (video files)
+- ROI zone alerts, movement heatmap, class filter, CSV logging, snapshots
+
 ---
 
 ## 📁 Project Structure
 
 ```
-VISOR - Object Detection And Tracking/
+VISOR-Object-Detection-and-Tracking/
 │
-├── app.py                     ← Flask server + video processing thread
+├── app.py                     ← Flask server, video thread, Start/Pause/Stop + seek logic
 ├── config.py                  ← All settings & constants (edit here!)
 ├── requirements.txt           ← Python dependencies
 │
 ├── modules/
-│   ├── detector.py            ← YOLOv8 detection wrapper
+│   ├── detector.py            ← YOLO11 / YOLOv8 detection wrapper
 │   ├── tracker.py             ← DeepSORT tracking wrapper
 │   ├── analytics.py           ← Speed, direction, counts, CSV logging
 │   ├── heatmap.py             ← Movement heatmap generator
@@ -26,7 +35,7 @@ VISOR - Object Detection And Tracking/
 │
 ├── static/
 │   ├── css/style.css          ← Cyberpunk dark theme
-│   └── js/main.js             ← Frontend controls & ROI canvas
+│   └── js/main.js             ← Playback controls, seek bar, ROI canvas, analytics polling
 │
 └── logs/
     └── detections.csv         ← Auto-generated detection log
@@ -59,8 +68,8 @@ Open a terminal in the project folder and run:
 ```bash
 pip install -r requirements.txt
 ```
-> This installs Flask, YOLOv8, DeepSORT, OpenCV, and NumPy.
-> YOLOv8 model weights (~6MB) download automatically on first run.
+> This installs Flask, Ultralytics (YOLO11 / YOLOv8), DeepSORT, OpenCV, and NumPy.
+> `yolo11n.pt` and `yolov8n.pt` are included. Other model weights (~5–130MB) download automatically the first time you select them.
 
 ### Step 3 — Run the server
 ```bash
@@ -72,6 +81,10 @@ Open your browser and go to:
 ```
 http://localhost:5000
 ```
+
+### Step 5 — Press ▶ Start
+The dashboard opens on a standby screen and the camera stays **closed**.
+Click **▶ Start** in the header to begin detection.
 
 ---
 
@@ -106,6 +119,26 @@ Users may download additional model weights directly from Ultralytics and place 
 
 
 ## 🎮 Features & How to Use
+
+### ▶ Start / ⏸ Pause / ⏹ Stop
+The header has three playback buttons and a live state badge.
+
+| State | Camera | Detection | What you see |
+|-------|--------|-----------|--------------|
+| **STOPPED** | Closed | Off | VISOR standby screen |
+| **RUNNING** | Open | Active | Live annotated video |
+| **PAUSED** | Open | Frozen | Last frame with a PAUSED banner |
+
+- Server starts in **STOPPED**, so the webcam never turns on by accident
+- **Pause** freezes the pipeline instantly; **Resume** continues from the same frame
+- **Stop** releases the camera and returns to standby
+
+### ⏩ Video Seek Bar (video files only)
+- Upload a video, press Start, and a seek bar appears below the video
+- Shows **current time** and **total duration** (e.g. `03:12 / 08:45`)
+- Drag the slider to jump to any position, for example to start analysing from minute 3
+- Tracker and analytics reset after a seek so IDs stay clean
+- Hidden automatically when the source is a webcam
 
 ### 🎯 DeepSORT Tracking
 - Each object gets a **unique ID** that persists across frames
@@ -158,7 +191,7 @@ Click **Download CSV** to get the full log file.
 
 ### 📷 Video Source
 - **Webcam**: Select index 0 (default) or 1 (second camera)
-- **Video File**: Upload an .mp4 / .avi file
+- **Video File**: Upload an .mp4 / .avi file (saved to `logs/`), then press Start
 - Switch sources without restarting the server
 
 ---
@@ -180,9 +213,9 @@ TARGET_FPS         = 30      # Processing frame rate cap
 ## 🧠 How It All Works
 
 ```
-Webcam/Video
+Webcam/Video  (starts only after ▶ Start)
     ↓
-OpenCV (frame capture)
+OpenCV (frame capture, seek support for files)
     ↓
 YOLO11 / YOLOv8 (detect objects → bounding boxes + class + confidence)
     ↓
@@ -207,8 +240,11 @@ Real-time Web Dashboard
 
 | Problem | Solution |
 |---------|----------|
+| Screen shows "Press START" | Click **▶ Start** in the header; detection does not begin automatically |
+| Upload failed | Make sure the server is running; check that the `logs/` folder exists |
+| Seek bar not visible | It only appears for uploaded video files, not webcam |
 | Camera not opening | Check `DEFAULT_SOURCE = 0` in config.py; try 1 or 2 |
-| Slow FPS | Switch to YOLOv8n model; reduce frame resolution |
+| Slow FPS | Switch to YOLO11n (nano) model; reduce frame resolution |
 | Tracking IDs keep resetting | Increase `DEEPSORT_MAX_AGE` in config.py |
 | DeepSORT install fails | `pip install deep-sort-realtime --upgrade` |
 | Port 5000 in use | Change `FLASK_PORT = 5001` in config.py |

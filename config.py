@@ -130,4 +130,4 @@ COCO_CLASSES = [
 FLASK_HOST  = "0.0.0.0"
 FLASK_PORT  = 5000
 FLASK_DEBUG = False
-SECRET_KEY  = "codealpha-od-tracking-2024"
+SECRET_KEY  = "visor-od-tracking-2024"
